@@ -1,18 +1,79 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!--
+    Author: John Tenney
+    Date: 4/20/2026
+    Purpose: Week 2 JavaScript project update.
+    This page adds control flow, looping, dark mode, and form interactivity
+    to make the portfolio page more dynamic and responsive to user actions.
+  -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Project Site</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: white;
+      color: black;
+    }
+
+    nav a {
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .featured-box {
+      border: 2px solid black;
+      padding: 15px;
+      margin-top: 10px;
+      background-color: #f4f4f4;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    .dark-mode a {
+      color: #90cdf4;
+    }
+
+    .dark-mode .featured-box {
+      background-color: #1f1f1f;
+      border-color: white;
+    }
+
+    .toggle-container {
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 150px;
+      height: auto;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 
 <body>
-  
+
+  <!-- Dark mode toggle -->
+  <div class="toggle-container">
+    <label>
+      <input type="checkbox" id="darkModeToggle"> Dark Mode
+    </label>
+  </div>
+
   <h2 id="welcomeMessage"></h2>
 
   <!-- Navigation -->
   <nav>
     <a href="#about">About</a> |
+    <a href="#featured">Featured Content</a> |
     <a href="#projects">Projects</a> |
     <a href="#contact">Contact</a>
   </nav>
@@ -26,6 +87,41 @@
       Hey, I’m John. I’m a software development student learning web development
       and building projects to improve my skills.
     </p>
+
+    <h3>Skills</h3>
+    <ul id="skillsList"></ul>
+  </section>
+
+  <hr>
+
+  <!-- Featured Content Section -->
+  <section id="featured">
+    <h1>Featured Content</h1>
+
+    <div id="universityResources" class="featured-box">
+      <h3>University Resources</h3>
+      <p>
+        <a href="https://www.ecpi.edu/" target="_blank">ECPI University Home Page</a>
+      </p>
+      <p>
+        <a href="https://www.ecpi.edu/programs/computer-information-science-bachelor-degree" target="_blank">
+          ECPI Software Development Program
+        </a>
+      </p>
+    </div>
+
+    <div id="personalProjects" class="featured-box">
+      <h3>Personal Projects</h3>
+      <a href="#" target="_blank">
+        <img src="https://via.placeholder.com/150" alt="Project 1">
+      </a>
+      <a href="#" target="_blank">
+        <img src="https://via.placeholder.com/150" alt="Project 2">
+      </a>
+      <a href="#" target="_blank">
+        <img src="https://via.placeholder.com/150" alt="Project 3">
+      </a>
+    </div>
   </section>
 
   <hr>
@@ -35,7 +131,7 @@
     <h1>Projects</h1>
     <p>Here are a few projects I’ve worked on:</p>
 
-    <ul>
+    <ul id="projectList">
       <li><a href="#">Project 1 (coming soon)</a></li>
       <li><a href="#">Project 2 (coming soon)</a></li>
       <li><a href="#">Project 3 (coming soon)</a></li>
@@ -49,29 +145,69 @@
     <h1>Contact</h1>
     <p>You can reach me using the form below:</p>
 
-    <form>
-      <label>Name:</label><br>
-      <input type="text"><br><br>
+    <form id="contactForm">
+      <label for="name">Name:</label><br>
+      <input type="text" id="name"><br><br>
 
-      <label>Email:</label><br>
-      <input type="email"><br><br>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email"><br><br>
 
-      <label>Subject:</label><br>
-      <input type="text"><br><br>
+      <label for="subject">Subject:</label><br>
+      <input type="text" id="subject"><br><br>
 
-      <label>Message:</label><br>
-      <textarea></textarea><br><br>
+      <label for="message">Message:</label><br>
+      <textarea id="message"></textarea><br><br>
 
-      <button type="submit">Send</button>
+      <button type="submit" id="submitBtn">Send</button>
     </form>
   </section>
-<script>
-  // ask for user's name
-  let userName = prompt("What is your name?");
 
-  // update the page with their name
-  document.getElementById("welcomeMessage").textContent =
-    "Welcome to my site, " + userName + "!";
-</script>
+  <script>
+    // Ask for the user's name and display a welcome message
+    let userName = prompt("What is your name?");
+    document.getElementById("welcomeMessage").textContent =
+      "Welcome to my site, " + userName + "!";
+
+    // Create an array of skills and display them as a bulleted list
+    let skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
+    let skillsList = document.getElementById("skillsList");
+
+    skills.forEach(function(skill) {
+      let li = document.createElement("li");
+      li.textContent = skill;
+      skillsList.appendChild(li);
+    });
+
+    // Use conditional logic to show or hide featured content
+    let projectCount = document.querySelectorAll("#projectList li").length;
+    let universityResources = document.getElementById("universityResources");
+    let personalProjects = document.getElementById("personalProjects");
+
+    if (projectCount < 3) {
+      universityResources.style.display = "block";
+      personalProjects.style.display = "block";
+    } else {
+      universityResources.style.display = "none";
+      personalProjects.style.display = "block";
+    }
+
+    // Add dark mode toggle functionality
+    let darkModeToggle = document.getElementById("darkModeToggle");
+
+    darkModeToggle.addEventListener("change", function() {
+      document.body.classList.toggle("dark-mode");
+    });
+
+    // Add interactivity to the contact form submit button
+    let contactForm = document.getElementById("contactForm");
+
+    contactForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      let nameInput = document.getElementById("name").value;
+
+      alert("Thank you, " + nameInput + ", your message has been sent!");
+    });
+  </script>
 </body>
 </html>
